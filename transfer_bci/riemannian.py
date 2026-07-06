@@ -1,7 +1,9 @@
-def _riemannian_alignment(covariances, scaling=False):
-    import pyriemann
+from pyriemann.geometry.mean import gmean
 
-    mean_cov = pyriemann.utils.mean.mean_covariance(covariances)
+
+def _riemannian_alignment(covariances, scaling=False):
+
+    mean_cov = gmean(covariances, metric="riemann")
     n_covs, _, _ = covariances.shape
 
     if scaling:
