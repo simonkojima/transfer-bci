@@ -22,6 +22,10 @@ def _euclidean_alignment(X):
 
 
 def euclidean_alignment(X, online=False, enable_tqdm=True, min_trials=1):
+    """
+    https://doi.org/10.1109/TBME.2019.2913914
+
+    """
     if not online:
         return _euclidean_alignment(X=X)
 

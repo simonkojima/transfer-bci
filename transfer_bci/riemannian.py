@@ -15,7 +15,7 @@ def _riemannian_alignment(covariances, scaling=False):
             d_tilda_sqrt += distance(
                 mean_cov, covariances[m, :, :], metric="riemann", squared=True
             )
-        d_tilda = np.sqrt(d_tilda_sqrt)
+        d_tilda = np.sqrt(d_tilda_sqrt / n_covs)
 
     mean_cov_inv_sqrt = fractional_matrix_power(mean_cov, -0.5)
 
