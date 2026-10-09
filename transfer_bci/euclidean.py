@@ -44,7 +44,27 @@ def euclidean_alignment(X, online=False, enable_tqdm=True, min_trials=1):
             X_aligned[n] = x
         else:
             R = R_sum / (n + 1)
-            R_inv_sqrt = scipy.linalg.fractional_matrix_power(R, -0.5)
+            eigenvalues, eigenvectors = scipy.linalg.eigh(R)
+            R_inv_sqrt = (eigenvectors * (1.0 / np.sqrt(eigenvalues))) @ eigenvectors.T
             X_aligned[n] = R_inv_sqrt @ x
 
     return X_aligned
+
+
+
+def channel_normalization(X, online=False, eps=1e-12):
+    X = np.asarray(X, dtype=np.float64)
+
+    if not online:
+        mean_power = np.mean(X**2, axis=(0, 2))
+        return X / np.sqrt(mean_power[None, :, None] + eps)
+
+    aligned = np.empty_like(X)
+    power_sum = np.zeros(X.shape[1], dtype=np.float64)
+
+    for n, x in enumerate(X):
+        power_sum += np.mean(x**2, axis=-1)
+        mean_power = power_sum / (n + 1)
+        aligned[n] = x / np.sqrt(mean_power[:, None] + eps)
+
+    return aligned

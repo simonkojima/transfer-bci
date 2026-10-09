@@ -1,8 +1,13 @@
 import numpy as np
-from pyriemann.geometry.distance import distance
-from pyriemann.geometry.mean import gmean
 from scipy.linalg import fractional_matrix_power
 from tqdm import tqdm
+
+try:
+    from pyriemann.geometry.distance import distance
+    from pyriemann.geometry.mean import gmean
+except ModuleNotFoundError:
+    from pyriemann.utils.distance import distance
+    from pyriemann.utils.mean import mean_covariance as gmean
 
 
 def _riemannian_alignment(covariances, scaling=False):
